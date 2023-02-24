@@ -97,7 +97,9 @@ COPY hooks /etc/arc/hooks/
 ENV ImageOS=ubuntu22
 
 RUN echo "PATH=${PATH}" > /etc/environment \
-    && echo "ImageOS=${ImageOS}" >> /etc/environment
+    && echo "ImageOS=${ImageOS}" >> /etc/environment \
+
+RUN update-alternatives --set iptables /usr/sbin/iptables-legacy
 
 USER runner
 
