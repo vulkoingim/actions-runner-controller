@@ -85,6 +85,8 @@ RUN export ARCH=$(echo ${TARGETPLATFORM} | cut -d / -f2) \
     && curl -fLo /usr/bin/docker-compose https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-linux-${ARCH} \
     && chmod +x /usr/bin/docker-compose
 
+RUN update-alternatives --set iptables /usr/sbin/iptables-legacy
+
 # We place the scripts in `/usr/bin` so that users who extend this image can
 # override them with scripts of the same name placed in `/usr/local/bin`.
 COPY entrypoint-dind.sh startup.sh logger.sh wait.sh graceful-stop.sh update-status /usr/bin/
@@ -104,7 +106,7 @@ ENV PATH="${PATH}:${HOME}/.local/bin"
 ENV ImageOS=ubuntu22
 
 RUN echo "PATH=${PATH}" > /etc/environment \
-    && echo "ImageOS=${ImageOS}" >> /etc/environment
+    && echo "ImageOS=${ImageOS}" >> /etc/environment \
 
 # No group definition, as that makes it harder to run docker.
 USER runner
